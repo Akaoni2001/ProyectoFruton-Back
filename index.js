@@ -16,7 +16,8 @@ app.use(express.json());
 
 app.use('/api/productos', require('./routes/producto'));
 app.use('/api/users', require('./routes/user'));
-app.use('/api/images', require('./routes/image'))
+app.use('/api/images', require('./routes/image'));
+app.use('/api/ventas', require('./routes/venta'));
 
 
 app.listen(4000, ()=>{

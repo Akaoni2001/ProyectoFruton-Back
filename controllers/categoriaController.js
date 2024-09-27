@@ -40,7 +40,7 @@ exports.actualizarCategorias = async(req,res)=>{
             res.status(404).json({msg: 'No existe la categoria'})
         }
 
-        producto.nombreCategoria= nombreCategoria;
+        producto.nombreCategoria = nombreCategoria;
 
         categoria = await Categoria.findOneAndUpdate({ _id: req.params.id}, categoria, {new:true})
         res.json(categoria);

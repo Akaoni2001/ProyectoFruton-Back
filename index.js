@@ -1,6 +1,7 @@
 const express = require('express');
 const conectarDB = require('./config/db');
 const router = require('./routes/producto');
+const user_router = require('./routes/user');
 const cors= require("cors");
 
 //Creamos el servidor
@@ -14,6 +15,11 @@ app.use(cors())
 app.use(express.json());
 
 app.use('/api/productos', require('./routes/producto'));
+app.use('/api/users', require('./routes/user'));
+app.use('/api/images', require('./routes/image'));
+app.use('/api/ventas', require('./routes/venta'));
+app.use('/api/categorias', require('./routes/categoria'));
+app.use('/api/tipo-producto', require('./routes/tipoproducto'));
 
 
 app.listen(4000, ()=>{

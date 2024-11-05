@@ -1,20 +1,19 @@
 const mongoose = require('mongoose');
+const {ProductoSchema}= require('./Producto');
 
 const VentaSchema = mongoose.Schema({
-    nombreCliente:{
+    nombreCliente: {
         type: String,
+        required: true
+    },productos:[{
+        type: ProductoSchema,
         require:true
-    },
-    producto:{
-        type: mongoose.Schema.Types.ObjectId,
-        ref:'Producto',
-        require:true
-    },
-    cantidad: {
+    }],
+    cantidades: [{
         type: Number,
         required: true
-    },
-    precioProducto: {
+    }],
+    precioTotal: {
         type: Number,
         required: true
     },

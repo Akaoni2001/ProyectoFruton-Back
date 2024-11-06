@@ -1,4 +1,5 @@
 const Categoria = require('../models/Categoria');
+const {Producto} = require("../models/Producto");
 
 exports.crearCategoria = async(req,res)=>{
     try {
@@ -73,8 +74,8 @@ exports.eliminarCategoria = async(req,res)=>{
     try {
         let categoria = await Categoria.findById(req.params.id);
 
-        if (!categoria) {
-            return res.status(404).json({ msg: 'No existe la categoria' });
+        if (await BuscarCategoria(categoria.nombreCategoria) == true) {
+            return res.status(404).json({ msg: 'Hay productos en la categoria'});
         }
 
         await Categoria.deleteOne({ _id: req.params.id }); // Eliminar el producto por su ID
@@ -85,4 +86,18 @@ exports.eliminarCategoria = async(req,res)=>{
         return res.status(500).send('Hubo un error');
     }
 
+}
+
+BuscarCategoria = async(categoria)=>{
+    try {
+        const productos = await Producto.find({ categoria:categoria });
+
+        console.log(productos.length);''
+        const todosInactivos = productos.length > 0 && productos.some(producto => producto.estado === true);
+        console.log(todosInactivos);
+
+        return todosInactivos;
+    } catch (error) {
+        console.log(error);
+    }
 }

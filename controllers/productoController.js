@@ -107,7 +107,7 @@ exports.actualizarStock = async (req, res) => {
             }
 
             producto.stock = stock;
-            producto.estado = (producto.stock === 0) ? false : true;
+            producto.estado = (producto.stock === 0) ? false : true;    
 
             const productoActualizado = await Producto.findOneAndUpdate({ _id: objectId }, producto, { new: true });
             productosActualizados.push(productoActualizado);

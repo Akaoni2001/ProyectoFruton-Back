@@ -21,6 +21,7 @@ app.use('/api/ventas', require('./routes/venta'));
 app.use('/api/categorias', require('./routes/categoria'));
 app.use('/api/tipo-producto', require('./routes/tipoproducto'));
 app.use('/api/roles', require('./routes/rol'));
+app.use('/api/pedidos', require('./routes/pedido'));
 
 
 app.listen(4000, ()=>{

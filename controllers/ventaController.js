@@ -1,12 +1,13 @@
 const Venta = require('../models/Venta');
 const {Producto} = require('../models/Producto');
+const Pedido = require('../models/Pedido');
 
 exports.registrarVenta = async (req,res)=>{
     try {
-        const { nombreCliente, productos, cantidades, precioTotal } = req.body; // `productos` y `cantidad` son arreglos
+        const { nombreCliente, productos, cantidades, precioTotal } = req.body;
 
         const productosDetalles = [];
-        // Validar que cada producto en el arreglo existe
+        
         for (const productoId of productos) {
             const producto = await Producto.findById(productoId);
             if (!producto) {
@@ -15,7 +16,7 @@ exports.registrarVenta = async (req,res)=>{
             productosDetalles.push(producto);
         }
 
-        // Crear una nueva venta con los productos, cantidades y precio total recibido
+        
         const nuevaVenta = new Venta({
             nombreCliente: nombreCliente,
             productos: productosDetalles,
@@ -24,8 +25,17 @@ exports.registrarVenta = async (req,res)=>{
             fechaVenta: Date.now()
         });
 
-        // Guardar la venta en la base de datos
+        
         await nuevaVenta.save();
+
+        
+        const nuevoPedido = new Pedido({
+            nombreCliente: nombreCliente,
+            productos: productos, 
+            cantidades: cantidades
+        });
+
+        await nuevoPedido.save();
 
         res.status(201).json(nuevaVenta);
     } catch (error) {

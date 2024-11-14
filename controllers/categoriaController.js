@@ -93,7 +93,7 @@ BuscarCategoria = async(categoria)=>{
         const productos = await Producto.find({ categoria:categoria });
 
         console.log(productos.length);''
-        const todosInactivos = productos.length > 0 && productos.some(producto => producto.estado === true);
+        const todosInactivos = productos.length > 0 && productos.somenp(producto => producto.estado === true);
         console.log(todosInactivos);
 
         return todosInactivos;

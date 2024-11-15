@@ -28,6 +28,10 @@ const ProductoSchema = mongoose.Schema({
     fechaCreacion:{
         type:Date,
         default: Date.now()
+    },
+    estado:{
+        type:Boolean,
+        default: true
     }
 
 });

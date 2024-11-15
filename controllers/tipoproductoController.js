@@ -1,6 +1,5 @@
 const tipoProducto = require("../models/tipoProducto");
 
-
 exports.crearTipoProducto = async (req, res)=> {
     
     try {

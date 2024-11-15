@@ -1,26 +1,41 @@
 const Venta = require('../models/Venta');
-const Producto = require('../models/Producto');
+const {Producto} = require('../models/Producto');
+const Pedido = require('../models/Pedido');
 
 exports.registrarVenta = async (req,res)=>{
     try {
-        const { nombreCliente, productoId, cantidad } = req.body;
+        const { nombreCliente, productos, cantidades, precioTotal } = req.body;
 
-        // Verificar que el producto exista
-        const producto = await Producto.findById(productoId);
-        if (!producto) {
-            return res.status(404).json({ message: 'Producto no encontrado' });
+        const productosDetalles = [];
+        
+        for (const productoId of productos) {
+            const producto = await Producto.findById(productoId);
+            if (!producto) {
+                return res.status(404).json({ message: `Producto con ID ${productoId} no encontrado` });
+            }
+            productosDetalles.push(producto);
         }
 
-        // Crear una nueva venta
+        
         const nuevaVenta = new Venta({
-            nombreCliente,
-            producto: productoId,
-            cantidad,
-            precioProducto: producto.precio // Tomar el precio del producto
+            nombreCliente: nombreCliente,
+            productos: productosDetalles,
+            cantidades: cantidades,
+            precioTotal: precioTotal,
+            fechaVenta: Date.now()
         });
 
-        // Guardar la venta en la base de datos
+        
         await nuevaVenta.save();
+
+        
+        const nuevoPedido = new Pedido({
+            nombreCliente: nombreCliente,
+            productos: productos, 
+            cantidades: cantidades
+        });
+
+        await nuevoPedido.save();
 
         res.status(201).json(nuevaVenta);
     } catch (error) {
@@ -31,10 +46,11 @@ exports.registrarVenta = async (req,res)=>{
 
 exports.obtenerVentas= async(req,res)=>{
     try {
-        const ventas = await Venta.find().populate('producto');
-        res.status(200).json(ventas);
+        const ventas = await Venta.find();
+        res.json(ventas)
+
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ message: 'Error al obtener las ventas' });
+        console.log(error);
+        res.status(500).send('Hubo un error al obtener las ventas')
     }
 }

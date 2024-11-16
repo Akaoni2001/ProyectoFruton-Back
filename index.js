@@ -25,6 +25,7 @@ app.use('/api/tipo-producto', require('./routes/tipoproducto'));
 app.use('/api/roles', require('./routes/rol'));
 app.use('/api/pedidos', require('./routes/pedido'));
 app.use('/api/reportes', require('./routes/reporte'));
+app.use('/api/recepcion-productos', require('./routes/recepcionproductos'));
 
 
 app.listen(4000, ()=>{

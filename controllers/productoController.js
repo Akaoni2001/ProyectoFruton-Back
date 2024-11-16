@@ -19,7 +19,6 @@ exports.crearProducto = async (req, res)=> {
 }
 
 exports.obtenerProductos = async(req,res)=>{
-    console.log("hola");
     try {
         
         const productos = await Producto.find();

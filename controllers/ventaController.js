@@ -8,6 +8,9 @@ exports.registrarVenta = async (req,res)=>{
 
         const productosDetalles = [];
         
+        
+
+        
         for (const productoId of productos) {
             const producto = await Producto.findById(productoId);
             if (!producto) {
@@ -16,6 +19,10 @@ exports.registrarVenta = async (req,res)=>{
             productosDetalles.push(producto);
         }
 
+        if(productosDetalles.length==0){
+            return res.status(404).json({ message: `No hay productos en la lista ` });
+            
+        }
         
         const nuevaVenta = new Venta({
             nombreCliente: nombreCliente,

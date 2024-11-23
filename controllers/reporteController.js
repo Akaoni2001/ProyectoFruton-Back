@@ -1,3 +1,4 @@
+
 const Reporte = require('../models/Reporte');
 const Pedido = require('../models/Pedido');
 
@@ -9,12 +10,14 @@ exports.crearReclamo = async(req,res)=>{
 
         await reclamo.save();
         res.send(reclamo);
+
         
     } catch (error) {
         console.log(error);
         res.status(500).send('Hubo un error')
     }
 }
+
 
 exports.obtenerReclamos = async(req,res)=>{
 
@@ -70,5 +73,6 @@ BuscarReclamo = async(reclamo)=>{
        
     } catch (error) {
         console.log(error);
+
     }
 }

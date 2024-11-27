@@ -7,7 +7,7 @@ const cors= require("cors");
 //Creamos el servidor
 const app = express();
 
-//Conectamos a la base de datos
+//Conectamos a la base de datos uwu
 conectarDB();
 app.use(cors())
 

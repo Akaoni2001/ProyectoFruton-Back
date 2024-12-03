@@ -1,19 +1,25 @@
-var jwt = require('jwt-simple');
-var moment = require('moment');
-var secret= 'alvarofz';
+const jwt = require('jsonwebtoken');
 
-
-exports.createToken = function(user){
-    var payload = {
-        sub : user.id,
+// Generar un JWT
+exports.createToken = (user) => {
+    const payload = {
+        id: user.id,
         nombres: user.nombres,
         apellidos: user.apellidos,
         email: user.email,
         role: user.role,
-        iat: moment().unix(),
-        exp: moment().add(30, 'days').unix(),
+    };
 
+    return jwt.sign(payload, process.env.SECRET, {
+        expiresIn: '1m', // Expiración de 1 hora
+    });
+};
+
+// Verificar un JWT
+exports.verifyToken = (token) => {
+    try {
+        return jwt.verify(token, process.env.SECRET);
+    } catch (error) {
+        return null;
     }
-
-    return jwt.encode(payload, secret);
-}
+};

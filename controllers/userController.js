@@ -1,34 +1,39 @@
 const User = require('../models/Users')
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
+const { createToken } = require('../helpers/jwt');
 
 exports.registrar = async (req, res) => {
     const { nombres, apellidos, email, password, role } = req.body;
     try {
-        let usuario = await User.findOne({ email });
+        let usuarioExistente = await User.findOne({ email });
 
-        if (usuario) {
+        if (usuarioExistente) {
             return res.status(400).json({ msg: 'El usuario ya existe' });
         }
 
-        usuario = new User({ nombres, apellidos, email, password, role });
+        const usuario = new User({ nombres, apellidos, email, password, role });
 
         // Encriptar el password
         const salt = await bcrypt.genSalt(10);
         usuario.password = await bcrypt.hash(password, salt);
 
         await usuario.save();
-        res.send(usuario);
+
+        // Generar el token
+        const token = createToken(usuario);
+
+        res.status(201).json({ token, usuario });
     } catch (error) {
         console.log(error);
-        res.status(500).send('Hubo un error');
+        res.status(500).send('Hubo un error al registrar el usuario');
     }
 };
 
+// Login de usuario
 exports.login = async (req, res) => {
     const { email, password } = req.body;
     try {
-        let usuario = await User.findOne({ email });
+        const usuario = await User.findOne({ email });
 
         if (!usuario) {
             return res.status(400).json({ msg: 'El usuario no existe' });
@@ -40,22 +45,13 @@ exports.login = async (req, res) => {
             return res.status(400).json({ msg: 'Contraseña incorrecta' });
         }
 
-        const payload = {
-            usuario: {
-                id: usuario.id
-            }
-        };
+        // Generar el token
+        const token = createToken(usuario);
 
-        jwt.sign(payload, process.env.SECRET, {
-            expiresIn: 3600 // 1 hora
-        }, (err, token) => {
-            if (err) throw err;
-            res.json({ token });
-        });
-
+        res.json({ token, usuario });
     } catch (error) {
         console.log(error);
-        res.status(500).send('Hubo un error');
+        res.status(500).send('Hubo un error al iniciar sesión');
     }
 };
 
